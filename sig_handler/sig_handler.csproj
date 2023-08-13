@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFrameworks>net7.0-macos;net6.0-macos;net6.0</TargetFrameworks>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>sig_handler</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <Compile Remove="native/*" />
+    </ItemGroup>
+</Project>

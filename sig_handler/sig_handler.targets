@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <Target Name="BuildNativeLibs" 
+            BeforeTargets="BeforeBuild"
+            Inputs="native/*.c"
+            Outputs="native/*.dylib">
+        <Exec Command="bash ./build.bash" 
+              ConsoleToMSBuild="true" 
+              WorkingDirectory="$(MSBuildThisFileDirectory)/native">
+            <Output TaskParameter="ConsoleOutput" PropertyName="OutputOfExec" />
+        </Exec>
+    </Target>
+
+    <Target Name="CopyCustomContent" AfterTargets="Build">
+        <Message Importance="High" Text="+++ $(MSBuildThisFileDirectory)native/handler.dylib ==> $(OutDir)\$(AppName).app\Contents\MonoBundle +++" />
+        <Copy SourceFiles="$(MSBuildThisFileDirectory)native/handler.dylib"
+              DestinationFolder="$(OutDir)$(AppName).app\Contents\MonoBundle"/>
+    </Target>
+
+    <Target Name="PatchDylibLoading" AfterTargets="Build">
+        <Exec Command="$(MSBuildThisFileDirectory)patch.sh $(MSBuildProjectDirectory)/$(OutDir) $(AppName)" ConsoleToMSBuild="true">
+            <Output TaskParameter="ConsoleOutput" PropertyName="OutputOfExec" />
+        </Exec>
+    </Target>
+    <Target Name="CleanPatchDylibLoading" BeforeTargets="Build">
+        <Exec Command="$(MSBuildThisFileDirectory)clean_patch.sh $(MSBuildProjectDirectory)/$(OutDir) $(AppName)" ConsoleToMSBuild="true">
+            <Output TaskParameter="ConsoleOutput" PropertyName="OutputOfExec" />
+        </Exec>
+    </Target>
+</Project>

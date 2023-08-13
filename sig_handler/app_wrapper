@@ -1,0 +1,10 @@
+#!/bin/bash
+SCRIPT_PATH=$(dirname $(realpath -s $0))
+
+PARENT_DIR="$(dirname "$SCRIPT_PATH")"
+
+MONO_BUNDLE="$PARENT_DIR/MonoBundle"
+
+HANDLER_DYLIB_PATH="$MONO_BUNDLE/handler.dylib"
+
+DYLD_INSERT_LIBRARIES=$HANDLER_DYLIB_PATH "$SCRIPT_PATH/test_app_original"
